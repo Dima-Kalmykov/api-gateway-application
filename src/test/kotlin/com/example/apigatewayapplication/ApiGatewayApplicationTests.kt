@@ -7,7 +7,5 @@ import org.springframework.boot.test.context.SpringBootTest
 class ApiGatewayApplicationTests {
 
     @Test
-    fun contextLoads() {
-    }
-
+    fun contextLoads() = Unit
 }

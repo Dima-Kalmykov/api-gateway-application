@@ -1,0 +1,11 @@
+server:
+  port: ${PORT:5000}
+
+spring:
+  application:
+    name: api-gateway-application
+rest:
+  publications:
+    url: http://super-puper/
+  subscription:
+    url: http://upoip/
