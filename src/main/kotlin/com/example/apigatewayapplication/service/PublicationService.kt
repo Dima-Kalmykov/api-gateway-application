@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder.fromUriString
+import java.util.UUID
 
 
 @Service
@@ -17,12 +18,12 @@ class PublicationService(
     private val restTemplate: RestTemplate = RestTemplate(),
 ) {
 
-    fun getPublication(id: String) = withLog("Get.Publication") {
+    fun getPublication(channelName: String) = withLog("Get.Publication") {
         checkNotNull(
             restTemplate.getForObject(
                 buildUrl(),
                 Publication::class.java,
-                id,
+                channelName,
             )
         )
     }
@@ -42,7 +43,7 @@ class PublicationService(
         checkNotNull(
             restTemplate.postForObject(
                 buildUrl(),
-                publication,
+                publication.apply { this.id = UUID.randomUUID().toString().replace("-", "") },
                 Publication::class.java,
             )
         )

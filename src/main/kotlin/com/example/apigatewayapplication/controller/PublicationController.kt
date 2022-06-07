@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/publications")
+@RequestMapping("/v1/")
 class PublicationController(private val publicationService: PublicationService) {
 
     @GetMapping
     fun getPublications() = publicationService.getPublications()
 
-    @GetMapping("/{id}")
-    fun getPublication(@PathVariable id: String) = publicationService.getPublication(id)
+    @GetMapping("/posts/{channelName}")
+    fun getPublication(@PathVariable channelName: String) = publicationService.getPublication(channelName)
 
-    @PostMapping
+    @PostMapping("/post")
     fun createPublication(@RequestBody publication: Publication) = publicationService.createPublication(publication)
 }
