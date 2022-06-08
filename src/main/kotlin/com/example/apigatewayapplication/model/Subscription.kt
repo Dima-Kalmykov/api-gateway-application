@@ -1,5 +1,7 @@
 package com.example.apigatewayapplication.model
 
+data class SubscriptionWrapper(val subscriptions: List<Subscription>)
+
 data class Subscription(
     val channel: Channel,
     val user: User,

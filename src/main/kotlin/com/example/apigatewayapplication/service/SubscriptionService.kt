@@ -2,6 +2,7 @@ package com.example.apigatewayapplication.service
 
 import com.example.apigatewayapplication.configuration.properties.RestProperties
 import com.example.apigatewayapplication.model.Subscription
+import com.example.apigatewayapplication.model.SubscriptionWrapper
 import com.example.apigatewayapplication.util.withLog
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -23,11 +24,9 @@ class SubscriptionService(
                 .queryParam("channelName", channelName)
                 .queryParam("userEmail", userEmail)
                 .toUriString(),
-            Response::class.java,
+            SubscriptionWrapper::class.java,
         )?.subscriptions ?: emptyList()
     }
-
-    data class Response(val subscriptions: List<Subscription>)
 
     fun deleteSubscription(subscription: String, channelName: String): Any? = withLog("Delete.Subscription") {
         makeRequest(subscription, channelName)
