@@ -27,6 +27,10 @@ dependencies {
     kapt(group = "org.springframework.boot", name = "spring-boot-configuration-processor")
     annotationProcessor(group = "org.springframework.boot", name = "spring-boot-configuration-processor")
 
+    // Open API
+    val openApiVersion = properties["openApiVersion"] as String
+    implementation(group = "org.springdoc", name = "springdoc-openapi-ui", version = openApiVersion)
+
     // Logging
     val loggingVersion = properties["kotlinLoggingVersion"] as String
     implementation(group = "io.github.microutils", name = "kotlin-logging", version = loggingVersion)

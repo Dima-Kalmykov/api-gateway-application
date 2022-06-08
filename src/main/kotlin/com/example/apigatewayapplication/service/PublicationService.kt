@@ -18,17 +18,7 @@ class PublicationService(
     private val restTemplate: RestTemplate = RestTemplate(),
 ) {
 
-    fun getPublication(channelName: String) = withLog("Get.Publication") {
-        checkNotNull(
-            restTemplate.getForObject(
-                buildUrl(),
-                Publication::class.java,
-                channelName,
-            )
-        )
-    }
-
-    fun getPublications() = withLog("Get.Publications") {
+    fun getPublications(channelName: String) = withLog("Get.Publications") {
         checkNotNull(
             restTemplate.exchange(
                 buildUrl(),
