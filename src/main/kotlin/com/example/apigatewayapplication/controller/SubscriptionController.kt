@@ -5,15 +5,24 @@ import com.example.apigatewayapplication.service.SubscriptionService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/subscription")
+@RequestMapping("api/v1/subscription")
 class SubscriptionController(private val subscriptionService: SubscriptionService) {
 
     @GetMapping
-    fun getSubscriptions() = subscriptionService.getSubscriptions()
+    fun getSubscriptions(
+        @RequestParam(defaultValue = "") channelName: String,
+        @RequestParam(defaultValue = "") userEmail: String,
+    ): List<Subscription> = subscriptionService.getSubscriptions(channelName, userEmail)
 
-    @GetMapping("/{id}")
-    fun getSubscription(@PathVariable id: String) = subscriptionService.getSubscription(id)
+    @PostMapping("/{channelName}")
+    fun createSubscription(
+        @PathVariable channelName: String,
+        @RequestBody userEmail: String,
+    ) = subscriptionService.createSubscription(userEmail, channelName)
 
-    @PostMapping
-    fun createSubscription(@RequestBody subscription: Subscription) = subscriptionService.createSubscription(subscription)
+    @DeleteMapping("/{channelName}")
+    fun deleteSubscription(
+        @PathVariable channelName: String,
+        @RequestBody userEmail: String,
+    ) = subscriptionService.deleteSubscription(userEmail, channelName)
 }

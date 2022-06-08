@@ -16,7 +16,7 @@ data class PublicationProperties(
 }
 
 data class SubscriptionProperties(
-    val subscriptions: String = "/subscriptions"
+    val subscriptions: String = "/api/v1/subscription"
 ) {
     lateinit var url: String
 }

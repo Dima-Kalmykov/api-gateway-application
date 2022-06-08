@@ -1,15 +1,13 @@
 package com.example.apigatewayapplication.service
 
 import com.example.apigatewayapplication.configuration.properties.RestProperties
-import com.example.apigatewayapplication.model.Publication
 import com.example.apigatewayapplication.model.Subscription
 import com.example.apigatewayapplication.util.withLog
-import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
-import org.springframework.http.HttpMethod
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.util.UriComponentsBuilder
 import org.springframework.web.util.UriComponentsBuilder.fromUriString
 
 @Service
@@ -18,38 +16,40 @@ class SubscriptionService(
     private val restTemplate: RestTemplate = RestTemplate(),
 ) {
 
-    fun getSubscription(id: String) = withLog("Get.Subscription") {
-        checkNotNull(
-            restTemplate.getForObject(
-                buildUrl(),
-                Subscription::class.java,
-                id,
-            )
-        )
+    fun getSubscriptions(channelName: String, userEmail: String): List<Subscription> = withLog("Get.Subscriptions") {
+        restTemplate.getForObject(
+            fromUriString(restProperties.subscription.url)
+                .path(restProperties.subscription.subscriptions)
+                .queryParam("channelName", channelName)
+                .queryParam("userEmail", userEmail)
+                .toUriString(),
+            Response::class.java,
+        )?.subscriptions ?: emptyList()
     }
 
-    fun getSubscriptions() = withLog("Get.Subscriptions") {
-        checkNotNull(
-            restTemplate.exchange(
-                buildUrl(),
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                object : ParameterizedTypeReference<List<Publication>>() {}
-            ).body
-        )
+    data class Response(val subscriptions: List<Subscription>)
+
+    fun deleteSubscription(subscription: String, channelName: String): Any? = withLog("Delete.Subscription") {
+        makeRequest(subscription, channelName)
     }
 
-    fun createSubscription(subscription: Subscription) = withLog("Post.Subscription") {
-        checkNotNull(
-            restTemplate.postForObject(
-                buildUrl(),
-                subscription,
-                Subscription::class.java,
-            )
-        )
+    fun createSubscription(subscription: String, channelName: String): Any? = withLog("Post.Subscription") {
+        makeRequest(subscription, channelName)
     }
 
-    private fun buildUrl() = fromUriString(restProperties.subscription.url)
-        .path(restProperties.subscription.subscriptions)
-        .toUriString()
+    private fun makeRequest(subscription: String, channelName: String): Any? {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val requestEntity = HttpEntity(subscription, headers)
+
+        return restTemplate.postForObject(
+            fromUriString(restProperties.subscription.url)
+                .path(restProperties.subscription.subscriptions)
+                .path("/{channelName}")
+                .toUriString(),
+            requestEntity,
+            Any::class.java,
+            channelName,
+        )
+    }
 }
