@@ -12,7 +12,7 @@ class SubscriptionController(private val subscriptionService: SubscriptionServic
     fun getSubscriptions(
         @RequestParam(defaultValue = "") channelName: String,
         @RequestParam(defaultValue = "") userEmail: String,
-    ): List<Subscription> = subscriptionService.getSubscriptions(channelName, userEmail)
+    ) = subscriptionService.getSubscriptions(channelName, userEmail)
 
     @PostMapping("/{channelName}")
     fun createSubscription(

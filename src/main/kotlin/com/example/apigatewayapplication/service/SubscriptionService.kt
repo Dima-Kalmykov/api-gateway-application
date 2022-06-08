@@ -17,7 +17,7 @@ class SubscriptionService(
     private val restTemplate: RestTemplate = RestTemplate(),
 ) {
 
-    fun getSubscriptions(channelName: String, userEmail: String): List<Subscription> = withLog("Get.Subscriptions") {
+    fun getSubscriptions(channelName: String, userEmail: String) = withLog("Get.Subscriptions") {
         restTemplate.getForObject(
             fromUriString(restProperties.subscription.url)
                 .path(restProperties.subscription.subscriptions)
