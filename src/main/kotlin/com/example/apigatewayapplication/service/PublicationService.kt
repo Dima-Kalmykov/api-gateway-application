@@ -35,6 +35,7 @@ class PublicationService(
         restTemplate.postForObject(
             fromUriString(restProperties.publications.url)
                 .path(restProperties.publications.postPublication)
+                .encode()
                 .toUriString(),
             addIdIfEmpty(publication),
             String::class.java,

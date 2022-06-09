@@ -23,6 +23,7 @@ class SubscriptionService(
                 .path(restProperties.subscription.subscriptions)
                 .queryParam("channelName", channelName)
                 .queryParam("userEmail", userEmail)
+                .encode()
                 .toUriString(),
             SubscriptionWrapper::class.java,
         )?.subscriptions ?: emptyList()
@@ -45,6 +46,7 @@ class SubscriptionService(
             fromUriString(restProperties.subscription.url)
                 .path(restProperties.subscription.subscriptions)
                 .path("/{channelName}")
+                .encode()
                 .toUriString(),
             requestEntity,
             Any::class.java,
