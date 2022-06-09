@@ -1,7 +1,6 @@
 package com.example.apigatewayapplication.service
 
 import com.example.apigatewayapplication.configuration.properties.RestProperties
-import com.example.apigatewayapplication.model.Subscription
 import com.example.apigatewayapplication.model.SubscriptionWrapper
 import com.example.apigatewayapplication.util.withLog
 import org.springframework.http.HttpEntity
