@@ -6,6 +6,6 @@ spring:
     name: api-gateway-application
 rest:
   publications:
-    url: http://super-puper/
+    url: https://post-system-196.herokuapp.com/v1/
   subscription:
-    url: http://178.250.157.184:6001/
+    url: http://178.250.157.184:6001/api/v1/

@@ -18,28 +18,32 @@ class PublicationService(
     private val restTemplate: RestTemplate = RestTemplate(),
 ) {
 
-    fun getPublications(channelName: String) = withLog("Get.Publications") {
-        checkNotNull(
-            restTemplate.exchange(
-                buildUrl(),
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                object : ParameterizedTypeReference<List<Publication>>() {}
-            ).body
-        )
+    fun getPublications(channelId: String): List<Publication> = withLog("Get.Publications") {
+        restTemplate.exchange(
+            fromUriString(restProperties.publications.url)
+                .path(restProperties.publications.getPublication)
+                .encode()
+                .toUriString(),
+            HttpMethod.GET,
+            HttpEntity.EMPTY,
+            object : ParameterizedTypeReference<List<Publication>>() {},
+            channelId,
+        ).body ?: emptyList()
     }
 
-    fun createPublication(publication: Publication) = withLog("Post.Publication") {
-        checkNotNull(
-            restTemplate.postForObject(
-                buildUrl(),
-                publication.apply { this.id = UUID.randomUUID().toString().replace("-", "") },
-                Publication::class.java,
-            )
-        )
+    fun createPublication(publication: Publication): String = withLog("Post.Publication") {
+        restTemplate.postForObject(
+            fromUriString(restProperties.publications.url)
+                .path(restProperties.publications.postPublication)
+                .toUriString(),
+            addIdIfEmpty(publication),
+            String::class.java,
+        ) ?: ""
     }
 
-    private fun buildUrl() = fromUriString(restProperties.publications.url)
-        .path(restProperties.publications.publication)
-        .toUriString()
+    private fun addIdIfEmpty(publication: Publication) = publication.apply {
+        if (id.isEmpty()) {
+            this.id = UUID.randomUUID().toString().replace("-", "")
+        }
+    }
 }

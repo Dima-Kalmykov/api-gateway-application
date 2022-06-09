@@ -10,13 +10,14 @@ data class RestProperties(
 )
 
 data class PublicationProperties(
-    val publication: String = "/publications",
+    val postPublication: String = "/post",
+    val getPublication: String = "/posts/{channelId}",
 ) {
     lateinit var url: String
 }
 
 data class SubscriptionProperties(
-    val subscriptions: String = "/api/v1/subscription"
+    val subscriptions: String = "/subscription"
 ) {
     lateinit var url: String
 }
