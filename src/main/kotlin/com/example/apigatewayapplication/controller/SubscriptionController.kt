@@ -14,15 +14,11 @@ class SubscriptionController(private val subscriptionService: SubscriptionServic
         @RequestParam(defaultValue = "") userEmail: String,
     ) = subscriptionService.getSubscriptions(channelName, userEmail)
 
-    @PostMapping("/{channelName}")
-    fun createSubscription(
-        @PathVariable channelName: String,
-        @RequestBody userEmail: String,
-    ) = subscriptionService.createSubscription(userEmail, channelName)
+    @PostMapping
+    fun createSubscription(@RequestBody subscription: Subscription) =
+        subscriptionService.createSubscription(subscription)
 
-    @DeleteMapping("/{channelName}")
-    fun deleteSubscription(
-        @PathVariable channelName: String,
-        @RequestBody userEmail: String,
-    ) = subscriptionService.deleteSubscription(userEmail, channelName)
+    @DeleteMapping
+    fun deleteSubscription(@RequestBody subscription: Subscription) =
+        subscriptionService.deleteSubscription(subscription)
 }
