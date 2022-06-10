@@ -9,14 +9,27 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder.fromUriString
-import java.util.UUID
+import java.util.*
 
 
 @Service
 class PublicationService(
     private val restProperties: RestProperties,
+    private val subscriptionService: SubscriptionService,
     private val restTemplate: RestTemplate = RestTemplate(),
 ) {
+
+    fun getPosts(email: String): List<Publication> {
+        val channels = subscriptionService.getSubscriptions(channelName = "", userEmail = email).map { it.channelName }
+        val response = mutableListOf<Publication>()
+        channels.forEach { channel ->
+            val publicationsInChannel = getPublications(channel)
+
+            response.addAll(publicationsInChannel)
+        }
+
+        return response.toList()
+    }
 
     fun getPublications(channelId: String): List<Publication> = withLog("Get.Publications") {
         restTemplate.exchange(
